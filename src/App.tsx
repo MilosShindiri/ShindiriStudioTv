@@ -1,5 +1,11 @@
+import { AppContainer, GlobalStyle } from "./styles/globalStyles";
+
 function App() {
-  return <></>;
+  return (
+    <AppContainer>
+      <GlobalStyle />
+    </AppContainer>
+  );
 }
 
 export default App;
