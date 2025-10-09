@@ -15,6 +15,12 @@ export const MenuWrapper = styled.div<MenuWrapperProps>`
   margin: 32px 47px 988px 32px;
   background-color: ${({ $hasFocusedChild }) => ($hasFocusedChild ? "" : "")};
   z-index: 10;
+  letter-spacing: 4px;
+  font-weight: 700;
+  line-height: 100%;
+  font-family: "Inter", sans-serif;
+  font-size: 24px;
+  gap: 88px;
 `;
 
 export const LogoBox = styled.div`

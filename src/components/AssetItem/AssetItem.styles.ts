@@ -1,7 +1,6 @@
 import styled from "styled-components";
 
 export const AssetWrapper = styled.div`
-  margin-right: 22px;
   display: flex;
   flex-direction: column;
 `;
@@ -12,7 +11,7 @@ interface AssetBoxProps {
 }
 export const AssetBox = styled.div<AssetBoxProps>`
   width: 229px;
-  height: 359px;
+  height: 300px;
   background-color: ${({ color }) => color};
   border-color: white;
   border-style: solid;
@@ -23,8 +22,8 @@ export const AssetBox = styled.div<AssetBoxProps>`
 
 export const AssetTitle = styled.div`
   color: white;
-  margin-top: 10px;
-  font-family: "Segoe UI";
+  margin-top: 16px;
+  font-family: "Inter", sans-serif;
   font-size: 24px;
   font-weight: 400;
 `;
