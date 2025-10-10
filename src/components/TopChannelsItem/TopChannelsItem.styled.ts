@@ -3,16 +3,21 @@ import styled from "styled-components";
 interface ChannelItemProps {
   $focused: boolean;
   $selected: boolean;
+  $reorderTarget: boolean;
 }
 
 export const ChannelItemBox = styled.div<ChannelItemProps>`
   color: ${({ $focused, $selected }) =>
     $focused || $selected ? "white" : "#aaa"};
   background-color: ${({ $focused, $selected }) =>
-    $focused || $selected ? "#333" : "#111"};
+    $selected ? "#222" : $focused ? "#333" : "#111"};
   border: 2px solid
-    ${({ $selected, $focused }) =>
-      $selected ? "#ED1C24" : $focused ? "white" : "transparent"};
+    ${({ $selected, $focused, $reorderTarget }) => {
+      if ($selected) return "#ED1C24";
+      if ($reorderTarget) return "#00BFFF";
+      if ($focused) return "white";
+      return "transparent";
+    }};
   display: flex;
   flex-direction: column;
   align-items: center;

@@ -6,6 +6,7 @@ interface TopChannelsProps {
   title: string;
   icon: string;
   selected: boolean;
+  reorderTarget: boolean;
   onSelect: () => void;
 }
 
@@ -13,6 +14,7 @@ export const TopChannelsItem: FC<TopChannelsProps> = ({
   title,
   icon,
   selected,
+  reorderTarget,
   onSelect,
 }) => {
   const { ref, focused } = useFocusable({
@@ -21,7 +23,12 @@ export const TopChannelsItem: FC<TopChannelsProps> = ({
   });
 
   return (
-    <ChannelItemBox ref={ref} $focused={focused} $selected={selected}>
+    <ChannelItemBox
+      ref={ref}
+      $focused={focused}
+      $selected={selected}
+      $reorderTarget={reorderTarget}
+    >
       <img src={icon} alt={title} />
       <span>{title}</span>
     </ChannelItemBox>
