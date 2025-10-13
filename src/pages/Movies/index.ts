@@ -1,1 +1,1 @@
-// export { MoviesPage } from "./Movies.tsx";
+export { MoviesPage } from "./Movies.tsx";

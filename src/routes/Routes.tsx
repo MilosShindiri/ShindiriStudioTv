@@ -3,7 +3,7 @@ import { PagePaths } from "./routes_utils";
 import { AppLayout } from "./AppLayout";
 import { createBrowserRouter } from "react-router-dom";
 import { HomePage } from "../pages/Home";
-// import { MoviesPage } from "../pages/Movies";
+import { MoviesPage } from "../pages/Movies";
 
 export const router = createBrowserRouter([
   {
@@ -13,7 +13,7 @@ export const router = createBrowserRouter([
         element: <AppLayout />,
         children: [
           { path: PagePaths.HOME, element: <HomePage /> },
-          // { path: PagePaths.MOVIES, element: <MoviesPage /> },
+          { path: PagePaths.MOVIES, element: <MoviesPage /> },
           // { path: PagePaths.SERIES, element: <SeriesPage /> },
         ],
       },

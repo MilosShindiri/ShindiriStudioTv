@@ -7,9 +7,12 @@ import { LogoBox, MenuWrapper } from "./Menu.styles";
 import { MenuItem } from "../MenuItem/MenuItem";
 import { menu } from "../../constants/menu";
 import logo from "/images/logo.png";
+import { useNavigate } from "react-router-dom";
 import type { MenuProps } from "../../types/menu";
 
 export const Menu = ({ focusKey: focusKeyParam }: MenuProps) => {
+  const navigate = useNavigate();
+
   const [selected, setSelected] = useState(menu[0].title);
 
   const { ref, focusKey, focusSelf, hasFocusedChild } = useFocusable({
@@ -33,7 +36,10 @@ export const Menu = ({ focusKey: focusKeyParam }: MenuProps) => {
             key={item.title}
             title={item.title}
             selected={selected === item.title}
-            onSelect={() => setSelected(item.title)}
+            onSelect={() => {
+              setSelected(item.title);
+              navigate(item.path);
+            }}
           />
         ))}
       </MenuWrapper>
