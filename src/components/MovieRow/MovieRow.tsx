@@ -1,12 +1,13 @@
 import {
   FocusContext,
+  setFocus,
   useFocusable,
 } from "@noriginmedia/norigin-spatial-navigation";
-import { useCallback, useRef } from "react";
+import { useCallback, useEffect, useRef } from "react";
 import type { Movie, MoviesRowProps } from "../../types/movies";
 import { MovieCard } from "../MovieCard/MovieCard";
 import { movies } from "../../constants/movies";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import {
   MovieRowScrollingContent,
   MovieRowScrollingWrapper,
@@ -14,13 +15,23 @@ import {
 } from "./MovieRow.styled";
 
 export function MoviesRow({ onFocus, onFocusMovie }: MoviesRowProps) {
-  const { ref, focusKey } = useFocusable({ onFocus });
-
   const navigate = useNavigate();
+  const location = useLocation();
+
+  const preferredChildFocusKey = location.state?.focusKey;
+
+  const { ref, focusKey } = useFocusable({ onFocus, preferredChildFocusKey });
+
   const scrollingRef = useRef<HTMLDivElement | null>(null);
 
+  useEffect(() => {
+    if (preferredChildFocusKey) {
+      setFocus(preferredChildFocusKey);
+    }
+  }, [preferredChildFocusKey]);
+
   const onAssetFocus = useCallback(
-    ({ x, movie }: { x: number; movie: Movie }) => {
+    ({ x, movie, focusKey }: { x: number; movie: Movie; focusKey: string }) => {
       if (scrollingRef.current) {
         scrollingRef.current.scrollTo({
           left: x,
@@ -28,8 +39,13 @@ export function MoviesRow({ onFocus, onFocusMovie }: MoviesRowProps) {
         });
       }
       onFocusMovie?.(movie);
+
+      navigate(".", {
+        replace: true,
+        state: { ...location.state, focusKey },
+      });
     },
-    [onFocusMovie]
+    [onFocusMovie, navigate, location.state]
   );
 
   return (
@@ -37,14 +53,31 @@ export function MoviesRow({ onFocus, onFocusMovie }: MoviesRowProps) {
       <MovieRowWrapper ref={ref}>
         <MovieRowScrollingWrapper ref={scrollingRef}>
           <MovieRowScrollingContent>
-            {movies.map((movie) => (
-              <MovieCard
-                key={movie.id}
-                movie={movie}
-                onSelect={() => navigate(`/movie/${movie.id}`)}
-                onFocus={(layout) => onAssetFocus({ x: layout.x, movie })}
-              />
-            ))}
+            {movies.map((movie) => {
+              const movieFocusKey = `movie-${movie.id}`;
+              return (
+                <MovieCard
+                  key={movie.id}
+                  movie={movie}
+                  focusKey={movieFocusKey}
+                  onSelect={() =>
+                    navigate(`/movie/${movie.id}`, {
+                      state: {
+                        from: location.pathname,
+                        focusKey: movieFocusKey,
+                      },
+                    })
+                  }
+                  onFocus={(layout) =>
+                    onAssetFocus({
+                      x: layout.x,
+                      movie,
+                      focusKey: movieFocusKey,
+                    })
+                  }
+                />
+              );
+            })}
           </MovieRowScrollingContent>
         </MovieRowScrollingWrapper>
       </MovieRowWrapper>

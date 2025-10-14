@@ -12,12 +12,19 @@ interface Movie {
 
 interface MovieCardProps {
   movie: Movie;
+  focusKey: string;
   onSelect: () => void;
   onFocus: (layout: { x: number }) => void;
 }
 
-export const MovieCard: FC<MovieCardProps> = ({ movie, onSelect, onFocus }) => {
+export const MovieCard: FC<MovieCardProps> = ({
+  movie,
+  focusKey,
+  onSelect,
+  onFocus,
+}) => {
   const { ref, focused } = useFocusable({
+    focusKey,
     onFocus: onFocus,
     onEnterPress: onSelect,
   });
