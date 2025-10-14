@@ -9,7 +9,7 @@ export const MovieRowWrapper = styled.div`
 export const MovieRowScrollingWrapper = styled.div`
   overflow-x: hidden;
   overflow-y: hidden;
-  margin-left: 64px;
+  padding-left: 64px;
   padding-right: 64px;
 `;
 
