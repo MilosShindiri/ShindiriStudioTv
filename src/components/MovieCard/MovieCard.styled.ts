@@ -21,13 +21,12 @@ export const MovieBox = styled.div<AssetBoxProps & { thumbnail: string }>`
   box-sizing: border-box;
 `;
 
-export const MovieName = styled.div`
+export const MovieName = styled.div<AssetBoxProps>`
   font-family: Inter;
   font-weight: 400;
-  font-style: normal;
   font-size: 24px;
   line-height: 100%;
-  letter-spacing: 0%;
   text-transform: capitalize;
   margin-top: 16px;
+  color: ${({ focused, color }) => (focused ? "#ffffff" : color)};
 `;

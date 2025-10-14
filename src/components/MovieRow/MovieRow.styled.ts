@@ -2,12 +2,15 @@ import styled from "styled-components";
 
 export const MovieRowWrapper = styled.div`
   width: 100%;
-  margin-left: 64px;
+
+  margin-top: 250px;
 `;
 
 export const MovieRowScrollingWrapper = styled.div`
   overflow-x: hidden;
   overflow-y: hidden;
+  margin-left: 64px;
+  padding-right: 64px;
 `;
 
 export const MovieRowScrollingContent = styled.div`

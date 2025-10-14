@@ -15,15 +15,18 @@ import {
 
 export function MoviesRow({ onFocus, onFocusMovie }: MoviesRowProps) {
   const { ref, focusKey } = useFocusable({ onFocus });
+
   const navigate = useNavigate();
   const scrollingRef = useRef<HTMLDivElement | null>(null);
 
   const onAssetFocus = useCallback(
     ({ x, movie }: { x: number; movie: Movie }) => {
-      scrollingRef.current?.scrollTo({
-        left: x,
-        behavior: "smooth",
-      });
+      if (scrollingRef.current) {
+        scrollingRef.current.scrollTo({
+          left: x,
+          behavior: "auto",
+        });
+      }
       onFocusMovie?.(movie);
     },
     [onFocusMovie]
@@ -38,9 +41,7 @@ export function MoviesRow({ onFocus, onFocusMovie }: MoviesRowProps) {
               <MovieCard
                 key={movie.id}
                 movie={movie}
-                onSelect={() => {
-                  navigate(`/movie/${movie.id}`);
-                }}
+                onSelect={() => navigate(`/movie/${movie.id}`)}
                 onFocus={(layout) => onAssetFocus({ x: layout.x, movie })}
               />
             ))}

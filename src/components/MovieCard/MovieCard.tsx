@@ -13,16 +13,21 @@ interface Movie {
 interface MovieCardProps {
   movie: Movie;
   onSelect: () => void;
-  onFocus: (params: { x: number }) => void;
+  onFocus: (layout: { x: number }) => void;
 }
 
-export const MovieCard: FC<MovieCardProps> = ({ movie, onFocus }) => {
-  const { ref, focused } = useFocusable({ onFocus });
+export const MovieCard: FC<MovieCardProps> = ({ movie, onSelect, onFocus }) => {
+  const { ref, focused } = useFocusable({
+    onFocus: onFocus,
+    onEnterPress: onSelect,
+  });
 
   return (
     <MovieWrapper ref={ref}>
       <MovieBox thumbnail={movie.thumbnail} focused={focused} color="#000" />
-      <MovieName>{movie.title}</MovieName>
+      <MovieName focused={focused} color="#FFFFFF99">
+        {movie.title}
+      </MovieName>
     </MovieWrapper>
   );
 };

@@ -7,14 +7,14 @@ export const movies: Movie[] = [
     description:
       "Boolean union variant background text vertical rectangle background horizontal. Boolean union variant background text vertical rectangle background horizontal. Pen export mask font image ellipse",
     thumbnail: "/images/thumbnails/empireT.png",
-    background: "/backgrounds/empire_bg.jpg",
+    background: "/images/empire.png",
   },
   {
     id: 2,
     title: "The Final Hours",
     description: "Some other movie description...",
     thumbnail: "/images/thumbnails/finalHoursT.png",
-    background: "/backgrounds/final_hours_bg.jpg",
+    background: "/images/alien.jpg",
   },
   {
     id: 3,
@@ -36,5 +36,34 @@ export const movies: Movie[] = [
     description: "Some other movie description...",
     thumbnail: "/images/thumbnails/adventureT.png",
     background: "/backgrounds/adventure_bg.jpg",
+  },
+  {
+    id: 4,
+    title: "Alien Reclamation",
+    description: "Some other movie description...",
+    thumbnail: "/images/thumbnails/alienT.png",
+    background: "/backgrounds/alien_bg.jpg",
+  },
+  {
+    id: 3,
+    title: "No Time To Die",
+    description: "Some other movie description...",
+    thumbnail: "/images/thumbnails/noTimeToDieT.png",
+    background: "/backgrounds/no_time_bg.jpg",
+  },
+  {
+    id: 2,
+    title: "The Final Hours",
+    description: "Some other movie description...",
+    thumbnail: "/images/thumbnails/finalHoursT.png",
+    background: "/images/alien.jpg",
+  },
+  {
+    id: 1,
+    title: "Empire Of The Sun",
+    description:
+      "Boolean union variant background text vertical rectangle background horizontal. Boolean union variant background text vertical rectangle background horizontal. Pen export mask font image ellipse",
+    thumbnail: "/images/thumbnails/empireT.png",
+    background: "/images/empire.png",
   },
 ];

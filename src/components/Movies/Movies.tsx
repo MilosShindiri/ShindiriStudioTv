@@ -3,7 +3,7 @@ import {
   useFocusable,
   FocusContext,
 } from "@noriginmedia/norigin-spatial-navigation";
-import { Container, ScrollingRows } from "./Movies.styled";
+import { Container, Info, ScrollingRows } from "./Movies.styled";
 import { rows } from "../../constants/rows";
 import { MoviesRow } from "../MovieRow/MovieRow";
 import type { Movie } from "../../types/movies";
@@ -24,30 +24,20 @@ export const MoviePage = () => {
   );
 
   const movieRow = rows.find((row) => row.title === "Movies");
+
   useEffect(() => {
-    if (!selectedMovie && movies?.length) {
+    if (!selectedMovie && movies.length > 0) {
       setSelectedMovie(movies[0]);
     }
-  }, [movieRow, selectedMovie]);
+  }, [selectedMovie]);
 
   return (
     <FocusContext.Provider value={focusKey}>
-      <Container
-        style={{
-          backgroundImage: selectedMovie
-            ? `url(${selectedMovie.background})`
-            : "none",
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-        }}
-      >
-        {/* Info */}
-        {selectedMovie && (
-          <div style={{ padding: "64px", color: "white" }}>
-            <h2>{selectedMovie.title}</h2>
-            <p>{selectedMovie.description}</p>
-          </div>
-        )}
+      <Container image={selectedMovie?.background ?? null}>
+        <Info isVisible={!!selectedMovie}>
+          <h2>{selectedMovie?.title ?? ""}</h2>
+          <p>{selectedMovie?.description ?? ""}</p>
+        </Info>
 
         <ScrollingRows ref={ref}>
           <div>
