@@ -2,15 +2,16 @@ import styled from "styled-components";
 
 export const ButtonsWrapper = styled.div`
   display: flex;
-  gap: 24px;
-  margin-top: 48px;
+  gap: 16px;
+  margin-top: 32px;
 `;
 
 export const Button = styled.button<{ focused: boolean }>`
   background-color: ${({ focused }) => (focused ? "#ED1C24" : "#333")};
   color: white;
-  padding: 12px 24px;
-  font-size: 20px;
+  padding: 14px 28px;
+  font-size: 18px;
   border: none;
-  border-radius: 4px;
+  border-radius: 6px;
+  transition: background-color 0.2s ease;
 `;

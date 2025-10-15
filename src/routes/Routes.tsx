@@ -16,9 +16,9 @@ export const router = createBrowserRouter([
           { path: PagePaths.HOME, element: <HomePage /> },
           { path: PagePaths.MOVIES, element: <MoviesPage /> },
           // { path: PagePaths.SERIES, element: <SeriesPage /> },
-          { path: PagePaths.DETAILS, element: <MovieDetails /> },
         ],
       },
+      { path: PagePaths.DETAILS, element: <MovieDetails /> },
     ],
   },
 ]);

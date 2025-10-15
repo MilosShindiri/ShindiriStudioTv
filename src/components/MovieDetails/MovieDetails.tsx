@@ -36,11 +36,13 @@ export const MoviesDetails = () => {
     <FocusContext.Provider value={focusKey}>
       <Container ref={ref}>
         <Poster image={movie.background} />
-        <Description title={movie.title} description={movie.description} />
-        <ActionButtons
-          onBack={handleBack}
-          onWatch={() => alert("Play movie")}
-        />
+        <div>
+          <Description title={movie.title} description={movie.description} />
+          <ActionButtons
+            onBack={handleBack}
+            onWatch={() => alert("Play movie")}
+          />
+        </div>
       </Container>
     </FocusContext.Provider>
   );
