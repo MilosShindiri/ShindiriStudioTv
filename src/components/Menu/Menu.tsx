@@ -7,19 +7,31 @@ import { LogoBox, MenuWrapper } from "./Menu.styles";
 import { MenuItem } from "../MenuItem/MenuItem";
 import { menu } from "../../constants/menu";
 import logo from "/images/logo.png";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import type { MenuProps } from "../../types/menu";
 
 export const Menu = ({ focusKey: focusKeyParam }: MenuProps) => {
   const navigate = useNavigate();
+  const location = useLocation();
 
-  const [selected, setSelected] = useState(menu[0].title);
+  const findSelectedTitleByPath = (path: string) => {
+    const menuItem = menu.find((item) => item.path === path);
+    return menuItem ? menuItem.title : menu[0].title;
+  };
+
+  const [selected, setSelected] = useState(() =>
+    findSelectedTitleByPath(location.pathname)
+  );
 
   const { ref, focusKey, focusSelf, hasFocusedChild } = useFocusable({
     focusKey: focusKeyParam,
     trackChildren: true,
     autoRestoreFocus: true,
   });
+
+  useEffect(() => {
+    setSelected(findSelectedTitleByPath(location.pathname));
+  }, [location.pathname]);
 
   useEffect(() => {
     focusSelf();
