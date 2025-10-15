@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import {
   useFocusable,
   FocusContext,
@@ -8,20 +8,42 @@ import { rows } from "../../constants/rows";
 import { MoviesRow } from "../MovieRow/MovieRow";
 import type { Movie } from "../../types/movies";
 import { movies } from "../../constants/movies";
-import { useLocation } from "react-router-dom";
+import debounce from "debounce";
 
 export const MoviePage = () => {
   const { ref, focusKey } = useFocusable();
-  const location = useLocation();
 
   const [selectedMovie, setSelectedMovie] = useState<Movie | null>(null);
+  const [hasScrolled, setHasScrolled] = useState(false);
+
+  const debouncedSetSelectedMovie = useMemo(
+    () =>
+      debounce((movie: Movie) => {
+        setSelectedMovie(movie);
+      }, 500),
+    []
+  );
+
+  const onFocusMovie = useCallback(
+    (movie: Movie) => {
+      if (!hasScrolled) {
+        setSelectedMovie(movie);
+        setHasScrolled(true);
+      } else {
+        debouncedSetSelectedMovie(movie);
+      }
+    },
+    [hasScrolled, debouncedSetSelectedMovie]
+  );
 
   const onRowFocus = useCallback(
     ({ y }: { y: number }) => {
-      ref.current.scrollTo({
-        top: y,
-        behavior: "smooth",
-      });
+      if (ref.current) {
+        ref.current.scrollTo({
+          top: y,
+          behavior: "smooth",
+        });
+      }
     },
     [ref]
   );
@@ -29,27 +51,21 @@ export const MoviePage = () => {
   const movieRow = rows.find((row) => row.title === "Movies");
 
   useEffect(() => {
-    const focusKey = location.state?.focusKey;
-    if (focusKey) {
-      const idString = focusKey.split("-")[1];
-      const movie = movies.find((m) => m.id === Number(idString));
-      if (movie) {
-        setSelectedMovie(movie);
-        return;
-      }
-    }
-
     if (!selectedMovie && movies.length > 0) {
       setSelectedMovie(movies[0]);
     }
-  }, [location.state?.focusKey, selectedMovie]);
+  }, [selectedMovie]);
+
+  if (!selectedMovie) {
+    return null;
+  }
 
   return (
     <FocusContext.Provider value={focusKey}>
-      <Container image={selectedMovie?.background ?? null}>
-        <Info isVisible={!!selectedMovie}>
-          <h2>{selectedMovie?.title ?? ""}</h2>
-          <p>{selectedMovie?.description ?? ""}</p>
+      <Container image={selectedMovie.background}>
+        <Info isVisible={true}>
+          <h2>{selectedMovie.title}</h2>
+          <p>{selectedMovie.description}</p>
         </Info>
 
         <ScrollingRows ref={ref}>
@@ -58,7 +74,7 @@ export const MoviePage = () => {
               <MoviesRow
                 title={movieRow.title}
                 onFocus={onRowFocus}
-                onFocusMovie={(movie) => setSelectedMovie(movie)}
+                onFocusMovie={onFocusMovie}
               />
             )}
           </div>
