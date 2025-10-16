@@ -9,10 +9,18 @@ export interface Movie {
   description: string;
   thumbnail: string;
   background: string;
+  genres: string[];
+  runtime: number | null;
+  releaseYear: string;
+  country: string;
+  rating: number;
+  director: string;
+  cast: string[];
 }
 
 export interface MoviesRowProps {
   title: string;
+  movies: Movie[];
   onFocusMovie: (movie: Movie) => void;
   onFocus: (
     layout: FocusableComponentLayout,

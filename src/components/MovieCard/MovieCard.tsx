@@ -16,7 +16,11 @@ interface MovieCardProps {
   onSelect: () => void;
   onFocus: (layout: { x: number }) => void;
 }
-
+const truncateTitle = (title: string, maxWords: number = 5): string => {
+  const words = title.split(" ");
+  if (words.length <= maxWords) return title;
+  return words.slice(0, maxWords).join(" ") + "...";
+};
 export const MovieCard: FC<MovieCardProps> = ({
   movie,
   focusKey,
@@ -33,7 +37,7 @@ export const MovieCard: FC<MovieCardProps> = ({
     <MovieWrapper ref={ref}>
       <MovieBox thumbnail={movie.thumbnail} focused={focused} color="#000" />
       <MovieName focused={focused} color="#FFFFFF99">
-        {movie.title}
+        {truncateTitle(movie.title)}
       </MovieName>
     </MovieWrapper>
   );

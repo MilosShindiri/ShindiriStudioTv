@@ -1,17 +1,21 @@
 import { URLS_API } from "../../constants/urls";
-import type {
-  Movie,
-  MovieQueryParams,
-  MoviesResponse,
-  RawMovieResponse,
-} from "../../types/TMDBTypes";
 import { parseMovie, parseTMDBResponse } from "../../utils/Parser";
+import type { Movie } from "../../types/movies";
+import type { RawMovieResponse } from "../../types/TMDBTypes";
 import apiClient from "./apiCLient";
 
+export interface MovieQueryParams {
+  page?: number;
+  genre?: number;
+  year?: number;
+  query?: string;
+  sortBy?: string;
+  staleTime?: number;
+  gcTime?: number;
+}
+
 export const tmdbService = {
-  getPopularMovies: async (
-    params: MovieQueryParams = {}
-  ): Promise<MoviesResponse> => {
+  getPopularMovies: async (params: MovieQueryParams = {}): Promise<Movie[]> => {
     const response = await apiClient.get(URLS_API.GET_MOVIES, {
       params: {
         page: params.page ?? 1,
@@ -22,12 +26,12 @@ export const tmdbService = {
       },
     });
 
-    return parseTMDBResponse(response.data);
+    return parseTMDBResponse(response.data).results;
   },
 
   getSearchedMovies: async (
     params: MovieQueryParams = {}
-  ): Promise<MoviesResponse> => {
+  ): Promise<Movie[]> => {
     const response = await apiClient.get(URLS_API.GET_SEARCH, {
       params: {
         page: params.page ?? 1,
@@ -36,10 +40,8 @@ export const tmdbService = {
       },
     });
 
-    return parseTMDBResponse(response.data);
+    return parseTMDBResponse(response.data).results;
   },
-
-  getGenres: () => apiClient.get(URLS_API.GET_GENRES).then((res) => res.data),
 
   getNowPlaying: async (): Promise<Movie[]> => {
     const response = await apiClient.get<RawMovieResponse>(
@@ -48,8 +50,15 @@ export const tmdbService = {
     return response.data.results.map(parseMovie);
   },
 
-  getMovieDetails: (id: number | string) =>
-    apiClient.get(URLS_API.GET_MOVIE_DETAILS(id)).then((res) => res.data),
+  getMovieDetails: async (id: number | string): Promise<Movie> => {
+    const response = await apiClient.get(URLS_API.GET_MOVIE_DETAILS(id), {
+      params: {
+        append_to_response: "credits",
+      },
+    });
+
+    return parseMovie(response.data);
+  },
 
   getSimilarMovies: async (id: number | string): Promise<Movie[]> => {
     const response = await apiClient.get<RawMovieResponse>(
@@ -58,18 +67,16 @@ export const tmdbService = {
     return response.data.results.map(parseMovie);
   },
 
-  getTrending: async (
-    timeWindow: "day" | "week" = "day"
-  ): Promise<MoviesResponse> => {
+  getTrending: async (timeWindow: "day" | "week" = "day"): Promise<Movie[]> => {
     const response = await apiClient.get(
       URLS_API.GET_TRENDING_MOVIES(timeWindow)
     );
-    return parseTMDBResponse(response.data);
+    return parseTMDBResponse(response.data).results;
   },
 
   getTrendingMultiplePages: async (
     timeWindow: "day" | "week" = "day",
-    totalPages: number = 25
+    totalPages: number = 5
   ): Promise<Movie[]> => {
     const requests = Array.from({ length: totalPages }, (_, i) =>
       apiClient.get(URLS_API.GET_TRENDING_MOVIES(timeWindow), {
@@ -78,31 +85,6 @@ export const tmdbService = {
     );
 
     const responses = await Promise.all(requests);
-
-    const allParsed = responses.map((res) => parseTMDBResponse(res.data));
-    return allParsed.flatMap((parsed) => parsed.results);
-  },
-
-  getTopMoviesByPopularity: async (
-    daysAgo: number = 7,
-    totalPages: number = 25
-  ): Promise<Movie[]> => {
-    const date = new Date();
-    date.setDate(date.getDate() - daysAgo);
-    const gteDate = date.toISOString().split("T")[0];
-
-    const requests = Array.from({ length: totalPages }, (_, i) =>
-      apiClient.get(URLS_API.GET_MOVIES, {
-        params: {
-          sort_by: "popularity.desc",
-          "primary_release_date.gte": gteDate,
-          page: i + 1,
-        },
-      })
-    );
-
-    const responses = await Promise.all(requests);
-    const allParsed = responses.map((res) => parseTMDBResponse(res.data));
-    return allParsed.flatMap((parsed) => parsed.results);
+    return responses.flatMap((res) => parseTMDBResponse(res.data).results);
   },
 };

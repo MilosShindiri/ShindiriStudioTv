@@ -4,14 +4,19 @@ import {
   FocusContext,
 } from "@noriginmedia/norigin-spatial-navigation";
 import { Container, Info, ScrollingRows } from "./Movies.styled";
-import { rows } from "../../constants/rows";
+
 import { MoviesRow } from "../MovieRow/MovieRow";
 import type { Movie } from "../../types/movies";
-import { movies } from "../../constants/movies";
 import debounce from "debounce";
+import { usePopularMovies } from "../../queries/movies";
+import { rows } from "../../constants/rows";
+import { Loader } from "../Loader";
 
 export const MoviePage = () => {
   const { ref, focusKey } = useFocusable();
+  const { data, isLoading } = usePopularMovies();
+
+  const movies: Movie[] = useMemo(() => data ?? [], [data]);
 
   const [selectedMovie, setSelectedMovie] = useState<Movie | null>(null);
   const [hasScrolled, setHasScrolled] = useState(false);
@@ -54,10 +59,10 @@ export const MoviePage = () => {
     if (!selectedMovie && movies.length > 0) {
       setSelectedMovie(movies[0]);
     }
-  }, [selectedMovie]);
+  }, [selectedMovie, movies]);
 
-  if (!selectedMovie) {
-    return null;
+  if (isLoading || !selectedMovie) {
+    return <Loader />;
   }
 
   return (
@@ -73,6 +78,7 @@ export const MoviePage = () => {
             {movieRow && (
               <MoviesRow
                 title={movieRow.title}
+                movies={movies}
                 onFocus={onRowFocus}
                 onFocusMovie={onFocusMovie}
               />

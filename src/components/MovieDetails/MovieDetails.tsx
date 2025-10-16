@@ -1,9 +1,14 @@
 import { useParams, useNavigate, useLocation } from "react-router-dom";
-import { movies } from "../../constants/movies";
-import { Container } from "./MovieDetails.styled";
-
-import { Poster } from "../Poster";
-import { Description } from "../Description";
+import {
+  Container,
+  DescriptionText,
+  InfoRow,
+  Left,
+  Meta,
+  PosterImage,
+  Right,
+  Title,
+} from "./MovieDetails.styled";
 import { ActionButtons } from "../ActionButtons";
 import {
   FocusContext,
@@ -12,19 +17,22 @@ import {
 } from "@noriginmedia/norigin-spatial-navigation";
 import { useEffect } from "react";
 
+import { Loader } from "../Loader";
+import { useMovieDetails } from "../../queries/movies";
+
 export const MoviesDetails = () => {
   const { id } = useParams();
   const location = useLocation();
-  const movie = movies.find((m) => m.id === Number(id));
-  const { ref, focusKey, focusSelf } = useFocusable();
   const navigate = useNavigate();
+
+  const { ref, focusKey, focusSelf } = useFocusable();
+
+  const { data: movie, isLoading, error } = useMovieDetails(id!);
 
   useEffect(() => {
     focusSelf();
     setFocus("WATCH_BUTTON");
   }, [focusSelf]);
-
-  if (!movie) return <div style={{ color: "white" }}>Movie not found</div>;
 
   const handleBack = () => {
     navigate(location.state?.from || "/", {
@@ -32,17 +40,44 @@ export const MoviesDetails = () => {
     });
   };
 
+  if (isLoading) return <Loader />;
+
+  if (error || !movie) {
+    return <div style={{ color: "white" }}>Movie not found</div>;
+  }
+
   return (
     <FocusContext.Provider value={focusKey}>
       <Container ref={ref}>
-        <Poster image={movie.background} />
-        <div>
-          <Description title={movie.title} description={movie.description} />
+        <Left>
+          <PosterImage src={movie.thumbnail} alt={movie.title} />
+          <Meta>
+            <div>{movie.genres.join(", ")}</div>
+            <div>{movie.runtime} Minutes</div>
+            <div>
+              {movie.country} - {movie.releaseYear} - IMDb: {movie.rating}
+            </div>
+          </Meta>
+        </Left>
+
+        <Right>
+          <Title>{movie.title}</Title>
+
+          <DescriptionText>{movie.description}</DescriptionText>
+
+          <InfoRow>
+            <strong>Director:</strong> {movie.director}
+          </InfoRow>
+
+          <InfoRow>
+            <strong>Cast:</strong> {movie.cast.join(", ")}
+          </InfoRow>
+
           <ActionButtons
             onBack={handleBack}
             onWatch={() => alert("Play movie")}
           />
-        </div>
+        </Right>
       </Container>
     </FocusContext.Provider>
   );

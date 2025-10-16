@@ -5,11 +5,18 @@ export interface TMDBPaginatedResponse<T> {
   total_results: number;
 }
 
-export interface ParsedResponse<T> {
-  page: number;
-  results: T[];
-  total_pages: number;
-  total_results: number;
+export interface RawCastMember {
+  id: number;
+  name: string;
+  character: string;
+  profile_path: string | null;
+}
+
+export interface RawCrewMember {
+  id: number;
+  name: string;
+  job: string;
+  department: string;
 }
 
 export interface RawMovie {
@@ -27,6 +34,13 @@ export interface RawMovie {
   original_title: string;
   popularity: number;
   video: boolean;
+  genres: { id: number; name: string }[];
+  runtime: number;
+  production_countries: { iso_3166_1: string; name: string }[];
+  credits?: {
+    crew: RawCrewMember[];
+    cast: RawCastMember[];
+  };
 }
 
 export interface RawTVShow {
@@ -46,33 +60,7 @@ export interface RawTVShow {
   origin_country: string[];
 }
 
-export interface Movie {
-  id: number;
-  poster: string | null;
-  title: string;
-}
-
-export interface TVShow {
-  id: number;
-  poster: string | null;
-  title: string;
-}
-
-export interface MovieQueryParams {
-  page?: number;
-  genre?: number;
-  year?: number;
-  query?: string;
-  sortBy?: string;
-  staleTime?: number;
-  gcTime?: number;
-}
-
 export type RawMovieResponse = TMDBPaginatedResponse<RawMovie>;
 export type RawTVResponse = TMDBPaginatedResponse<RawTVShow>;
 
-export type MoviesResponse = ParsedResponse<Movie>;
-export type TVShowsResponse = ParsedResponse<TVShow>;
-
 export type RawMediaResponse = RawMovieResponse | RawTVResponse;
-export type ParsedMediaResponse = MoviesResponse | TVShowsResponse;

@@ -6,7 +6,7 @@ import {
 import { useCallback, useEffect, useRef } from "react";
 import type { Movie, MoviesRowProps } from "../../types/movies";
 import { MovieCard } from "../MovieCard/MovieCard";
-import { movies } from "../../constants/movies";
+
 import { useNavigate, useLocation } from "react-router-dom";
 import {
   MovieRowScrollingContent,
@@ -14,7 +14,7 @@ import {
   MovieRowWrapper,
 } from "./MovieRow.styled";
 
-export function MoviesRow({ onFocus, onFocusMovie }: MoviesRowProps) {
+export function MoviesRow({ onFocus, onFocusMovie, movies }: MoviesRowProps) {
   const navigate = useNavigate();
   const location = useLocation();
 
