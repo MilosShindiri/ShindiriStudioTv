@@ -1,22 +1,61 @@
-export interface Movie {
+export interface TMDBPaginatedResponse<T> {
+  page: number;
+  results: T[];
+  total_pages: number;
+  total_results: number;
+}
+
+export interface ParsedResponse<T> {
+  page: number;
+  results: T[];
+  total_pages: number;
+  total_results: number;
+}
+
+export interface RawMovie {
   id: number;
   title: string;
   overview: string;
-  poster_path?: string;
-  backdrop_path?: string;
+  poster_path: string | null;
+  backdrop_path: string | null;
   release_date: string;
-  genre_ids: number[];
   vote_average: number;
-  popularity: number;
-  name: string;
   vote_count: number;
+  adult: boolean;
+  genre_ids: number[];
+  original_language: string;
+  original_title: string;
+  popularity: number;
+  video: boolean;
 }
 
-export interface MoviesResponse {
-  page: number;
-  results: Movie[];
-  total_pages: number;
-  total_results: number;
+export interface RawTVShow {
+  id: number;
+  name: string;
+  overview: string;
+  poster_path: string | null;
+  backdrop_path: string | null;
+  first_air_date: string;
+  vote_average: number;
+  vote_count: number;
+  adult: boolean;
+  genre_ids: number[];
+  original_language: string;
+  original_name: string;
+  popularity: number;
+  origin_country: string[];
+}
+
+export interface Movie {
+  id: number;
+  poster: string | null;
+  title: string;
+}
+
+export interface TVShow {
+  id: number;
+  poster: string | null;
+  title: string;
 }
 
 export interface MovieQueryParams {
@@ -29,49 +68,11 @@ export interface MovieQueryParams {
   gcTime?: number;
 }
 
-export interface Genre {
-  id: number;
-  name: string;
-}
+export type RawMovieResponse = TMDBPaginatedResponse<RawMovie>;
+export type RawTVResponse = TMDBPaginatedResponse<RawTVShow>;
 
-export interface SearchFilterProps {
-  query: string;
-  onQueryChange: (value: string) => void;
-}
+export type MoviesResponse = ParsedResponse<Movie>;
+export type TVShowsResponse = ParsedResponse<TVShow>;
 
-export interface SimilarMovie {
-  id: number;
-  title: string;
-  poster_path?: string;
-}
-
-export interface MovieDetailsProps {
-  movie: Movie;
-  similarMovies: SimilarMovie[];
-  loadingSimilar: boolean;
-  errorSimilar: Error | null;
-}
-
-export interface YearPopularity {
-  year: string;
-  avgPopularity: number;
-}
-
-export type SimpleMovie = Pick<
-  Movie,
-  "release_date" | "popularity" | "genre_ids"
->;
-
-export type TooltipPayload = {
-  payload: {
-    name: string;
-    popularity: number;
-    rating: number;
-    votes: number;
-  };
-};
-export interface CustomTooltipProps {
-  active?: boolean;
-  payload?: TooltipPayload[];
-  label?: string;
-}
+export type RawMediaResponse = RawMovieResponse | RawTVResponse;
+export type ParsedMediaResponse = MoviesResponse | TVShowsResponse;

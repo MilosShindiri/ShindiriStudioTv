@@ -67,7 +67,7 @@ export const useTopMovies = (daysAgo: number = 7) =>
 export const getNowPlayingOptions = () =>
   queryOptions({
     queryKey: ["now-playing"],
-    queryFn: () => tmdbService.getNowPlaying().then((res) => res.results),
+    queryFn: () => tmdbService.getNowPlaying(),
     staleTime: minutesToMilliseconds(10),
     gcTime: minutesToMilliseconds(20),
   });
