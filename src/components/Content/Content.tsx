@@ -1,16 +1,20 @@
 import {
   FocusContext,
+  setFocus,
   useFocusable,
 } from "@noriginmedia/norigin-spatial-navigation";
-import { useCallback } from "react";
+import { useCallback, useEffect } from "react";
 
 import { ContentRow } from "../AssetRow/AssetRow";
 import { rows } from "../../constants/rows";
 import { ContextWrapper, ScrollingRows } from "./Content.styles";
+import { useLocation, useNavigate } from "react-router-dom";
+import { menu } from "../../constants/menu";
 
 export function Content() {
   const { ref, focusKey } = useFocusable();
-
+  const navigate = useNavigate();
+  const location = useLocation();
   const onRowFocus = useCallback(
     ({ y }: { y: number }) => {
       ref.current.scrollTo({
@@ -20,6 +24,18 @@ export function Content() {
     },
     [ref]
   );
+
+  useEffect(() => {
+    if (location.state && location.state?.focusKey) {
+      setTimeout(() => {
+        setFocus(menu[0].title);
+        navigate(location.pathname, {
+          replace: true,
+          state: {},
+        });
+      }, 100);
+    }
+  }, [location, navigate]);
 
   return (
     <FocusContext.Provider value={focusKey}>

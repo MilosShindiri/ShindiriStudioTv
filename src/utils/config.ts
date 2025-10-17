@@ -2,7 +2,7 @@ import { init } from "@noriginmedia/norigin-spatial-navigation";
 
 export const setupSpatialNavigation = () => {
   init({
-    debug: false,
+    debug: true,
     visualDebug: false,
     distanceCalculationMethod: "center",
   });
