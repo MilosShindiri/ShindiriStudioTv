@@ -6,7 +6,6 @@ import {
 } from "../services/api/tmdbService";
 
 import { minutesToMilliseconds } from "../utils/timeUtils";
-import type { Movie } from "../types/movies";
 
 export const getMoviesOptions = (params: MovieQueryParams = {}) => {
   return queryOptions({
@@ -42,14 +41,6 @@ export const useSimilarMovies = (id: number | string) =>
 
 export const usePopularMovies = (params: MovieQueryParams = {}) =>
   useQuery(getMoviesOptions(params));
-
-export const useTrendingMoviesAll = (timeWindow: "day" | "week" = "day") =>
-  useQuery<Movie[]>({
-    queryKey: ["trending-movies-all", timeWindow],
-    queryFn: () => tmdbService.getTrendingMultiplePages(timeWindow),
-    staleTime: minutesToMilliseconds(10),
-    gcTime: minutesToMilliseconds(20),
-  });
 
 export const getNowPlayingOptions = () =>
   queryOptions({

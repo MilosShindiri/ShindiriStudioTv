@@ -13,6 +13,7 @@ import {
   MovieRowScrollingWrapper,
   MovieRowWrapper,
 } from "./MovieRow.styled";
+import { movieDetailsPath } from "../../utils/pathUtils";
 
 export function MoviesRow({ onFocus, onFocusMovie, movies }: MoviesRowProps) {
   const navigate = useNavigate();
@@ -40,12 +41,12 @@ export function MoviesRow({ onFocus, onFocusMovie, movies }: MoviesRowProps) {
       }
       onFocusMovie?.(movie);
 
-      navigate(".", {
+      navigate(location.pathname, {
         replace: true,
         state: { ...location.state, focusKey },
       });
     },
-    [onFocusMovie, navigate, location.state]
+    [onFocusMovie, navigate, location.pathname, location.state]
   );
 
   return (
@@ -61,7 +62,7 @@ export function MoviesRow({ onFocus, onFocusMovie, movies }: MoviesRowProps) {
                   movie={movie}
                   focusKey={movieFocusKey}
                   onSelect={() =>
-                    navigate(`/movie/${movie.id}`, {
+                    navigate(movieDetailsPath(movie.id), {
                       state: {
                         from: location.pathname,
                         focusKey: movieFocusKey,

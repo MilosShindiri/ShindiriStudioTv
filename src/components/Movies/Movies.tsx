@@ -11,10 +11,12 @@ import debounce from "debounce";
 import { usePopularMovies } from "../../queries/movies";
 import { rows } from "../../constants/rows";
 import { Loader } from "../Loader";
+import { useLocation } from "react-router-dom";
 
 export const MoviePage = () => {
   const { ref, focusKey } = useFocusable();
   const { data, isLoading } = usePopularMovies();
+  const location = useLocation();
 
   const movies: Movie[] = useMemo(() => data ?? [], [data]);
 
@@ -57,9 +59,17 @@ export const MoviePage = () => {
 
   useEffect(() => {
     if (!selectedMovie && movies.length > 0) {
-      setSelectedMovie(movies[0]);
+      const focusedMovie =
+        location.state?.focusKey &&
+        movies.find((m) => `movie-${m.id}` === location.state.focusKey);
+
+      setSelectedMovie(focusedMovie ?? movies[0]);
     }
-  }, [selectedMovie, movies]);
+  }, [selectedMovie, movies, location.state?.focusKey]);
+
+  useEffect(() => {
+    setHasScrolled(false);
+  }, []);
 
   if (isLoading || !selectedMovie) {
     return <Loader />;

@@ -8,9 +8,14 @@ interface MenuItemProps {
   onSelect: () => void;
 }
 
-export const MenuItem: FC<MenuItemProps> = ({ title, selected, onSelect }) => {
+export const MenuItem: FC<MenuItemProps & { focusKey?: string }> = ({
+  title,
+  selected,
+  onSelect,
+  focusKey,
+}) => {
   const { ref, focused } = useFocusable({
-    focusKey: title,
+    focusKey: focusKey || title,
     onEnterPress: onSelect,
   });
 

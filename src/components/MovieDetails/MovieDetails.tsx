@@ -30,9 +30,16 @@ export const MoviesDetails = () => {
   const { data: movie, isLoading, error } = useMovieDetails(id!);
 
   useEffect(() => {
-    focusSelf();
-    setFocus("WATCH_BUTTON");
-  }, [focusSelf]);
+    if (movie) {
+      focusSelf();
+
+      const raf = requestAnimationFrame(() => {
+        setFocus("WATCH_BUTTON");
+      });
+
+      return () => cancelAnimationFrame(raf);
+    }
+  }, [movie, focusSelf]);
 
   const handleBack = () => {
     navigate(location.state?.from || "/", {

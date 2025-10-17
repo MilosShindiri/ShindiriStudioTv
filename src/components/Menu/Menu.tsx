@@ -1,5 +1,6 @@
 import {
   FocusContext,
+  getCurrentFocusKey,
   useFocusable,
 } from "@noriginmedia/norigin-spatial-navigation";
 import { useEffect, useState } from "react";
@@ -13,7 +14,7 @@ import type { MenuProps } from "../../types/menu";
 export const Menu = ({ focusKey: focusKeyParam }: MenuProps) => {
   const navigate = useNavigate();
   const location = useLocation();
-
+  const [readyToFocus, setReadyToFocus] = useState(false);
   const findSelectedTitleByPath = (path: string) => {
     const menuItem = menu.find((item) => item.path === path);
     return menuItem ? menuItem.title : menu[0].title;
@@ -31,11 +32,14 @@ export const Menu = ({ focusKey: focusKeyParam }: MenuProps) => {
 
   useEffect(() => {
     setSelected(findSelectedTitleByPath(location.pathname));
+    setReadyToFocus(true);
   }, [location.pathname]);
 
   useEffect(() => {
-    focusSelf();
-  }, [focusSelf]);
+    if (readyToFocus && getCurrentFocusKey() === null) {
+      focusSelf();
+    }
+  }, [readyToFocus, focusSelf]);
 
   return (
     <FocusContext.Provider value={focusKey}>

@@ -21,7 +21,6 @@ export const useBackspaceHandler = () => {
       if (backKeys.includes(event.key)) {
         event.preventDefault();
 
-        // Na home stranama ne vraćamo nazad
         if (location.pathname === "/" || location.pathname === "/home") {
           return;
         }

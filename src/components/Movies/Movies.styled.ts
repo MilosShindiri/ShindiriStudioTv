@@ -2,9 +2,25 @@ import styled from "styled-components";
 
 export const Container = styled.div<{ image: string | null }>`
   flex: 1;
+  position: relative;
   overflow: hidden;
   display: flex;
   flex-direction: column;
+  &::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: ${({ image }) => (image ? `url(${image})` : "none")};
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    opacity: 1;
+    transition: opacity 0.3s ease-in-out;
+    z-index: -1;
+  }
   background-image: ${({ image }) =>
     image
       ? `
@@ -42,7 +58,7 @@ export const Info = styled.div<InfoProps>`
   font-family: Inter;
   font-weight: 600;
   opacity: ${({ isVisible }) => (isVisible ? 1 : 0)};
-  transition: opacity 0.3s ease;
+  transition: opacity 0.3s ease-in-out;
 
   h2 {
     font-size: 48px;
@@ -56,18 +72,18 @@ export const Info = styled.div<InfoProps>`
   }
 `;
 
-export const BackgroundImage = styled.div`
-  background-color: #151515;
-  background-image: url("/images/background_image.png");
-  background-size: cover;
-  background-repeat: no-repeat;
-  background-position: center;
-  width: 1920px;
-  height: 1080px;
-  display: flex;
-  flex-direction: row;
-  color: #575757;
-  & :focus {
-    color: white;
-  }
-`;
+// export const BackgroundImage = styled.div`
+//   background-color: #151515;
+//   background-image: url("/images/background_image.png");
+//   background-size: cover;
+//   background-repeat: no-repeat;
+//   background-position: center;
+//   width: 1920px;
+//   height: 1080px;
+//   display: flex;
+//   flex-direction: row;
+//   color: #575757;
+//   & :focus {
+//     color: white;
+//   }
+// `;
