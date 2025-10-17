@@ -28,6 +28,7 @@ export const Menu = ({ focusKey: focusKeyParam }: MenuProps) => {
     focusKey: focusKeyParam,
     trackChildren: true,
     autoRestoreFocus: true,
+    preferredChildFocusKey: selected,
   });
 
   useEffect(() => {
